@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "674197537632",
+    "firebase_url": "https://photographer-5eda4.firebaseio.com",
+    "project_id": "photographer-5eda4",
+    "storage_bucket": "photographer-5eda4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674197537632:android:ab46819be5809c1d",
+        "android_client_info": {
+          "package_name": "com.strapflatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "674197537632-a4uugv38bo7va3uogu1a18vjm3kr900g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.strapflatapp",
+            "certificate_hash": "04fc1839b7a20f464f2b8e22861197351038c5a4"
+          }
+        },
+        {
+          "client_id": "674197537632-r634d21vufoqah13oa2augrl9sfmgb22.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFZPx19x7NA6H_DXVSzIz9HLTkQhUkPTo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "674197537632-r634d21vufoqah13oa2augrl9sfmgb22.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
