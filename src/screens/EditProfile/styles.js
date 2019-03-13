@@ -13,9 +13,12 @@ export default {
     justifyContent: "center",
     margin: 16
   },
-  label: {
-    fontSize: 26,
-    fontWeight: "bold"
+  profile: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
+    alignSelf: 'center',
+    borderRadius: 100
   },
   subLabel: {
     fontSize: 16

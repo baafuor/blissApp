@@ -5,6 +5,8 @@ import firebase from "react-native-firebase";
 import Utils from "../utils/str";
 
 const COLL_USER = "Users";
+const REF_IMAGES = "/images/";
+const REF_PROFILE = "/profile/"
 
 class User {
   @observable
@@ -17,6 +19,8 @@ class User {
   accountType = "";
   @observable
   about = "";
+  @observable
+  photoURL = "";
 
   images = [];
 
@@ -52,16 +56,22 @@ class User {
     this.email = data.email;
     this.accountType = data.accountType;
     this.about = data.about;
-    this.images = images;
+    this.photoURL = data.photoURL.path ? data.photoURL.path : data.photoURL
 
-    Promise.all(this.fileupload()).then(async result => {
-      const _data = {
-        ...data,
-        images: result   
-      }
-      delete _data.uid;
-      await this.userCollection.doc(data.uid).set(_data);
-      save(data).then(() => callback()).catch(err => console.log(err));
+    Promise.all(this.fileupload(REF_IMAGES, images)).then(async result => {
+      Promise.all(this.fileupload(REF_PROFILE, [data.photoURL])).then(async _result => {
+        const _data = {
+          displayName: this.displayName,
+          email: this.email,
+          accountType: this.accountType,
+          about: this.about,
+          photoURL: _result[0].downloadURL,
+          images: result
+        }
+        await this.userCollection.doc(data.uid).set(_data);
+        this.images = images;
+        save(_data).then(() => callback()).catch(err => console.log(err));
+      })
     }).catch(err => console.log(err));
   }
 
@@ -75,28 +85,37 @@ class User {
   }
 
   @action
+  async getPhotographer(){
+    const users = []
+    const doc = await this.userCollection.where("accountType", "==", "photographer").get();
+    doc.forEach(user => {
+      users.push(user.data());
+    });
+    return users;
+  }
+
+  @action
   set(value) {
+    console.log(value)
     this.uid = value.uid;
     this.displayName = value.displayName;
     this.email = value.email;
-    this.accountType = value.accountType
+    this.about = value.about;
+    this.accountType = value.accountType;
+    this.photoURL = value.photoURL;
+    this.images = value.images;
   }
 
-  fileupload() {
+  fileupload(refPath, images) {
     let promises = []
-    const _images = this.images.filter(x => x != null && x != undefined);
+    const _images = images.filter(x => x != null && x != undefined);
     _images.forEach(image => {
       promises.push(
         new Promise((resolve, reject) => {
-          if(image.downloadURL){
-            resolve({
-              downloadURL: image.downloadURL,
-              name: image.name              
-            })
-          } else {
+          if(image.path){
             firebase
             .storage()
-            .ref('/images/' + Utils.getFileName())
+            .ref(refPath + Utils.getFileName())
             .putFile(image.path)
             .then(rImage => {
               resolve({
@@ -106,6 +125,16 @@ class User {
             })
             .catch(err => {
               console.log(err)
+            })
+          } else if(image.downloadURL){
+            resolve({
+              downloadURL: image.downloadURL,
+              name: image.name              
+            })
+          } else if(image.includes('http')) {
+            resolve({
+              downloadURL: image,
+              name: ""
             })
           }
         })

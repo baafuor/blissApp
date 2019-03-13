@@ -103,7 +103,7 @@ class SideBar extends Component {
                     }}
                   >
                     <Thumbnail
-                      source={require("../../../assets/Contacts/user.png")}
+                      source={{uri: this.props.User.photoURL}}
                       style={styles.profilePic}
                     />
                   </TouchableOpacity>

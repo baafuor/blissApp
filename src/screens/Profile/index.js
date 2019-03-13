@@ -6,17 +6,12 @@ import {
   Container,
   Content,
   Text,
-  Thumbnail,
   View,
-  List,
   ListItem,
-  Button,
-  Icon
 } from "native-base";
 import {inject,observer} from 'mobx-react'
-import {Grid, Col} from "react-native-easy-grid";
 import CustomHeader from "../../components/CustomHeader";
-import ProfileTab from '../Photographer/ProfileTabs/tabOne'
+import ProfileTab from '../Photographer/ProfileTabs/profile'
 
 import styles from "./styles";
 
@@ -31,17 +26,11 @@ class Profile extends Component {
       <Container>
         <ImageBackground
           source={require("../../../assets/bg-transparent.png")}
-          style={styles.container}
-        >
+          style={styles.container}>
           <CustomHeader hasTabs navigation={navigation} />
-
-          
           <Content
             showsVerticalScrollIndicator={false}
-            style={{backgroundColor: "#fff"}}
-          >
-            
-
+            style={{backgroundColor: "#fff"}}>
             {!this.props.User.imageData
               ? <View style={styles.linkTabs}>
                   <ListItem

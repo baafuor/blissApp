@@ -41,7 +41,6 @@ export default class EditProfile extends Component {
               {
                 Array.apply(0, Array(6)).map((x, i) => {
                   const uri = this.state.images[i] ? this.state.images[i].downloadURL : null
-                  console.log(this.state.images[i]);
                   return <PickImage uri={uri} onFilePick={(path, filename) => this.state.images[i] = { path, filename }} key={i} />
                 })
               }
