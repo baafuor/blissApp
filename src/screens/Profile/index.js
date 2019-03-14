@@ -11,7 +11,7 @@ import {
 } from "native-base";
 import {inject,observer} from 'mobx-react'
 import CustomHeader from "../../components/CustomHeader";
-import ProfileTab from '../Photographer/ProfileTabs/profile'
+import ProfileTab from '../Photographer/profile'
 
 import styles from "./styles";
 
@@ -27,7 +27,7 @@ class Profile extends Component {
         <ImageBackground
           source={require("../../../assets/bg-transparent.png")}
           style={styles.container}>
-          <CustomHeader hasTabs navigation={navigation} />
+          <CustomHeader hasTabs navigation={navigation} isBack />
           <Content
             showsVerticalScrollIndicator={false}
             style={{backgroundColor: "#fff"}}>

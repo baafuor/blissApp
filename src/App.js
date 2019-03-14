@@ -1,5 +1,5 @@
 import React from "react";
-import { StackNavigator, DrawerNavigator ,TabNavigator,createMaterialTopTabNavigator} from "react-navigation";
+import { StackNavigator, DrawerNavigator ,TabNavigator } from "react-navigation";
 import { Root } from "native-base";
 import Splash from './screens/Splash/splash'
 import Login from "./screens/Login/";
@@ -17,7 +17,7 @@ import EditProfile from "./screens/EditProfile";
 import ImageUpload from "./screens/ImageUpload";
 
 import Explore from './screens/Explore'
-import ProfileTabs from './screens/Photographer/ProfileTabs'
+import ProfileTabs from './screens/Photographer'
 import Friend from './screens/Settings/inviteFriends'
 import Contact from './screens/Settings/contactUs'
 import Terms from './screens/Settings/termServices'
@@ -25,9 +25,6 @@ import Payment from './screens/Settings/payment'
 import ZoomImage from './screens/ZoomImage/zoomImage'
 
 const TabNavigation = TabNavigator({
-  // Friend:{
-  //   screen:Friend
-  // },
   Contact:{
     screen:Contact
   },

@@ -10,13 +10,17 @@ import {
 
 import Profile from "./profile"
 import TabTwo from "./tabTwo";
-import TabThree from "./tabThree";
+import Book from "./book";
+
+import CustomHeader from "../../components/CustomHeader";
 
 class PhotographerTabs extends Component {
   
-  render() {  
+  render() {
+    const navigation = this.props.navigation;
     return (
       <Container>
+        <CustomHeader hasTabs navigation={navigation} isBack/>
         <Tabs style={{ backgroundColor: "#fff"}}>
           <Tab heading="Profile">
             <Profile navigation={this.props.navigation}/>
@@ -25,7 +29,7 @@ class PhotographerTabs extends Component {
             <TabTwo navigation={this.props.navigation} />
           </Tab>
           <Tab heading="Book ">
-            <TabThree navigation={this.props.navigation} />
+            <Book navigation={this.props.navigation} />
           </Tab>
         </Tabs>
       </Container>

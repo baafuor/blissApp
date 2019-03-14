@@ -56,12 +56,14 @@ class Explore extends Component {
             data={this.state.users}
             numColumns={2}
             renderItem={({item}) => {
-            return <ImageComponent 
-                      text={item.displayName}
-                      navigation={this.props.navigation}
-                      uri={item.photoURL}
-                      onPress={() => this.props.navigation.navigate('Profile')}
-                    />
+              return (
+                <ImageComponent 
+                  text={item.displayName}
+                  navigation={this.props.navigation}
+                  uri={item.photoURL}
+                  onPress={() => this.props.navigation.navigate('Profile', { user: item })}
+                />
+              )
             }}  
             keyExtractor={(item,index )=>  `${index}`}
           />

@@ -70,6 +70,7 @@ class User {
         }
         await this.userCollection.doc(data.uid).set(_data);
         this.images = images;
+        _data.uid = data.uid;
         save(_data).then(() => callback()).catch(err => console.log(err));
       })
     }).catch(err => console.log(err));
@@ -89,14 +90,13 @@ class User {
     const users = []
     const doc = await this.userCollection.where("accountType", "==", "photographer").get();
     doc.forEach(user => {
-      users.push(user.data());
+      users.push({...user.data(), key: user.id});
     });
     return users;
   }
 
   @action
   set(value) {
-    console.log(value)
     this.uid = value.uid;
     this.displayName = value.displayName;
     this.email = value.email;
