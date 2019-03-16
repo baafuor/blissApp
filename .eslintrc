@@ -47,7 +47,6 @@
           "varsIgnorePattern": "_ignore",
           "ignoreRestSiblings": true
       }],
-      "no-use-before-define": ["error", "nofunc"],
       "no-var": "error",
       "object-shorthand": ["warn", "always"],
       "prefer-const": ["warn", {

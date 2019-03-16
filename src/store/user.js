@@ -1,8 +1,9 @@
 /*eslint-disable */
-import { observable, action, set } from "mobx";
+import { observable, action, toJS } from "mobx";
 import { save } from "../utils/db";
 import firebase from "react-native-firebase";
 import Utils from "../utils/str";
+import { NUM_IMAGES } from "../mix/constants";
 
 const COLL_USER = "Users";
 const REF_IMAGES = "/images/";
@@ -21,7 +22,7 @@ class User {
   about = "";
   @observable
   photoURL = "";
-
+  @observable
   images = [];
 
   @observable
@@ -30,18 +31,6 @@ class User {
   userName='Username'
   @observable
   aboutUser ="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-  @observable
-  imageData=[{id:1,image:require('../../assets/NewsIcons/9.jpg'),name:'Fashion'},
-  {id:2,image:require("../../assets/NewsIcons/2.jpg"),name:'SCIENCE'},
-  {id:3,image:require("../../assets/NewsIcons/8.jpg"),name:'FASHION'},
-  {id:4,image:require("../../assets/NewsIcons/7.jpg"),name:'SCIENCE'},
-  {id:5,image:require("../../assets/NewsIcons/6.jpg"),name:'FASHION'},
-  {id:6,image:require("../../assets/NewsIcons/1.jpg"),name:'SCIENCE'},
-  {id:7,image:require("../../assets/NewsIcons/11.jpg"),name:'FASHION'},
-  {id:8,image:require("../../assets/NewsIcons/12.jpg"),name:'SCIENCE'},
-  {id:9,image:require("../../assets/NewsIcons/8.jpg"),name:'FASHION'},
-  {id:10,image:require("../../assets/NewsIcons/9.jpg"),name:'SCIENCE'}
-]
 
   constructor() {
     this.firestore = firebase.firestore()
@@ -49,17 +38,16 @@ class User {
   }
 
   @action
-  createOrUpdate(data, images, callback) {
-    
+  createOrUpdate(data, callback) {
     this.uid = data.uid;
     this.displayName = data.displayName;
     this.email = data.email;
     this.accountType = data.accountType;
     this.about = data.about;
-    this.photoURL = data.photoURL.path ? data.photoURL.path : data.photoURL
-
-    Promise.all(this.fileupload(REF_IMAGES, images)).then(async result => {
+    Promise.all(this.fileupload(REF_IMAGES, data.images)).then(async result => {
+      this.images = result;
       Promise.all(this.fileupload(REF_PROFILE, [data.photoURL])).then(async _result => {
+        this.photoURL = _result[0].downloadURL;
         const _data = {
           displayName: this.displayName,
           email: this.email,
@@ -68,10 +56,9 @@ class User {
           photoURL: _result[0].downloadURL,
           images: result
         }
+        this.cleanPrevious(data);
         await this.userCollection.doc(data.uid).set(_data);
-        this.images = images;
-        _data.uid = data.uid;
-        save(_data).then(() => callback()).catch(err => console.log(err));
+        this.save().then(() => callback()).catch(err => console.log(err));
       })
     }).catch(err => console.log(err));
   }
@@ -90,7 +77,7 @@ class User {
     const users = []
     const doc = await this.userCollection.where("accountType", "==", "photographer").get();
     doc.forEach(user => {
-      users.push({...user.data(), key: user.id});
+      users.push({...user.data(), uid: user.id});
     });
     return users;
   }
@@ -106,6 +93,36 @@ class User {
     this.images = value.images;
   }
 
+  @action
+  async deleteImage(index) {
+    await this.deleteImageStorage(this.images[index].downloadURL)
+    this.images.splice(index, 1);
+    await this.userCollection.doc(this.uid).update({ images: this.images.slice() });
+    return this.save();
+  }
+
+  async cleanPrevious(data) {
+    console.log('clean >>>' , data.previousData.images, '>>>', this.images)
+    if (data.previousData) {
+      for (let i = 0; i < data.previousData.images.length; i++) {
+        if (this.images[i].downloadURL !== data.previousData.images[i].downloadURL) {
+          console.log(this.images[i].downloadURL, '>>', data.previousData.images[i])
+          await this.deleteImageStorage(data.previousData.images[i].downloadURL);
+        }
+      }
+      if(this.photoURL !== data.previousData.photoURL){
+        await this.deleteImageStorage(data.previousData.photoURL);
+      }
+    }
+  }
+
+  deleteImageStorage(url){
+    if(url && url.match("firebasestorage.googleapis.com")){
+      const imageRef = firebase.storage().refFromURL(url)
+      return imageRef.delete();
+    }
+  }
+
   fileupload(refPath, images) {
     let promises = []
     const _images = images.filter(x => x != null && x != undefined);
@@ -115,7 +132,7 @@ class User {
           if(image.path){
             firebase
             .storage()
-            .ref(refPath + Utils.getFileName())
+            .ref(refPath + 'BBB___' + Utils.getFileName())
             .putFile(image.path)
             .then(rImage => {
               resolve({
@@ -142,6 +159,19 @@ class User {
     });
     return promises
   }
+
+  save() {
+   return save({
+      uid: this.uid,
+      displayName: this.displayName,
+      email: this.email,
+      about: this.about,
+      accountType: this.accountType,
+      photoURL: this.photoURL,
+      images: this.images
+    })
+  }
+
 }
 
 export default User;
