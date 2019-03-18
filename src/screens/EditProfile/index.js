@@ -13,6 +13,7 @@ import {
 import { inject } from 'mobx-react';
 import PickImage from './PickImage';
 
+import Loader from '../../components/Loader';
 import Input from '../../components/Input';
 import styles from './styles';
 
@@ -32,7 +33,8 @@ export default class EditProfile extends Component {
             images: [],
             previousData: {
                 photoURL
-            }
+            },
+            isLoading: true
         };
     }
 
@@ -51,6 +53,7 @@ export default class EditProfile extends Component {
                 }
             });
         }
+        this.setState({ isLoading: false });
     }
 
     onValueChange (value) {
@@ -101,6 +104,7 @@ export default class EditProfile extends Component {
                             <Text> Next </Text>
                         </Button>
                     </Content>
+                    {this.state.isLoading ? <Loader /> : <View />} 
                 </ScrollView>
             </Container>
         );

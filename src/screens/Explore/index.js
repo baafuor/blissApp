@@ -53,7 +53,7 @@ class Explore extends Component {
                     </Body>
                     <Right />
                 </Header>
-                <View style={{flex:1,}}>
+                <View style={{flex:1}}>
                     <FlatList
                         data={this.state.users}
                         numColumns={2}
