@@ -10,6 +10,7 @@ import {
 import { inject } from 'mobx-react';
 import { NavigationActions } from 'react-navigation';
 
+import Loader from '../../components/Loader';
 import PickImage from './PickImage';
 import styles from './styles';
 import { NUM_IMAGES } from '../../mix/constants';
@@ -31,7 +32,8 @@ export default class EditProfile extends React.Component {
             previousData: {
                 images: Object.assign([] , user.images instanceof Array ? user.images : []),
                 photoURL: user.previousData ? user.previousData.photoURL : ''
-            }
+            },
+            isLoading: false
         };
     }
 
@@ -63,12 +65,14 @@ export default class EditProfile extends React.Component {
                             <Text> Done </Text>
                         </Button>
                     </Content>
+                    { this.state.isLoading ? <Loader /> : <View /> }
                 </Container>
             </ScrollView>
         );
     }
 
     onNext = () => {
+        this.setState({ isLoading: true });
         this.props.User.createOrUpdate(this.state, () => {
             const resetAction = NavigationActions.reset({
                 index: 0,

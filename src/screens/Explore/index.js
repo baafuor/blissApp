@@ -14,6 +14,7 @@ import {
 import { inject, observer } from 'mobx-react';
 
 import styles from './styles';
+import Loader from '../../components/Loader';
 import ImageComponent from '../../components/FlateList/explorComponent';
 
 const headerLogo = require('../../../assets/header-logo.png');
@@ -25,13 +26,14 @@ class Explore extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            users: []
+            users: [],
+            isLoading: true
         };
     }
 
     async componentDidMount () {
         const users = await this.props.User.getPhotographer();
-        this.setState({ users });
+        this.setState({ users, isLoading: false });
     }
   
     render () {
@@ -68,6 +70,7 @@ class Explore extends Component {
                         keyExtractor={(item,index)=>  `${index}`}
                     />
                 </View>
+                {this.state.isLoading ? <Loader color={'transparent'} /> : <View />} 
             </Container>
         );
     }

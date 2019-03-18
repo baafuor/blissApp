@@ -14,6 +14,8 @@ import { inject, observer } from 'mobx-react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import ImageComponent from '../../components/FlateList/explorComponent';
+import Loader from '../../components/Loader';
+
 const primary = require('../../theme/variables/commonColor').brandPrimary;
 
 @inject('User')

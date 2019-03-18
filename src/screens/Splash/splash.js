@@ -11,7 +11,6 @@ export default class Splash extends Component {
     componentDidMount () {
         load(async (err, result) => {
             if (result) {
-                console.log(JSON.parse(result));
                 const user = await this.props.User.getById(JSON.parse(result).uid);
                 if (user) {
                     this.props.User.set(JSON.parse(result));
