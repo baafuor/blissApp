@@ -21,6 +21,7 @@ export default class EditProfile extends React.Component {
         super(props);
         const user = this.props.navigation.state.params;
         this.state = {
+            uid: user.uid,
             displayName: user.displayName,
             email: user.email,
             about: user.about,
@@ -28,7 +29,8 @@ export default class EditProfile extends React.Component {
             photoURL: user.photoURL,
             images: user.images instanceof Array ? user.images : [],
             previousData: {
-                images: Object.assign([] , user.images instanceof Array ? user.images : [])
+                images: Object.assign([] , user.images instanceof Array ? user.images : []),
+                photoURL: user.previousData.photoURL
             }
         };
     }
@@ -50,7 +52,7 @@ export default class EditProfile extends React.Component {
                                             onFilePick={(path, filename) => {
                                                 const _images = this.state.images;
                                                 _images[i] = { path, filename };
-                                                this.setState({  images: _images }, () => console.log('####', this.state));
+                                                this.setState({  images: _images });
                                             }} 
                                         />
                                     );
@@ -67,7 +69,6 @@ export default class EditProfile extends React.Component {
     }
 
     onNext = () => {
-        console.log(this.state);
         this.props.User.createOrUpdate(this.state, () => {
             const resetAction = NavigationActions.reset({
                 index: 0,

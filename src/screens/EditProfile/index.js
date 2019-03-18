@@ -29,7 +29,10 @@ export default class EditProfile extends Component {
             about: '',
             photoURL,
             accountType: 'photographer',
-            images: []
+            images: [],
+            previousData: {
+                photoURL
+            }
         };
     }
 
@@ -42,7 +45,10 @@ export default class EditProfile extends Component {
                 about: user.about,
                 accountType: user.accountType,
                 photoURL: user.photoURL,
-                images: user.images instanceof Array ? user.images : []
+                images: user.images instanceof Array ? user.images : [],
+                previousData: {
+                    photoURL: user.photoURL
+                }
             });
         }
     }

@@ -102,7 +102,6 @@ class User {
   }
 
   async cleanPrevious(data) {
-    console.log('clean >>>' , data.previousData.images, '>>>', this.images)
     if (data.previousData) {
       for (let i = 0; i < data.previousData.images.length; i++) {
         if (this.images[i].downloadURL !== data.previousData.images[i].downloadURL) {
@@ -132,7 +131,7 @@ class User {
           if(image.path){
             firebase
             .storage()
-            .ref(refPath + 'BBB___' + Utils.getFileName())
+            .ref(refPath + 'CCC___' + Utils.getFileName())
             .putFile(image.path)
             .then(rImage => {
               resolve({
