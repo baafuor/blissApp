@@ -30,7 +30,7 @@ export default class EditProfile extends React.Component {
             images: user.images instanceof Array ? user.images : [],
             previousData: {
                 images: Object.assign([] , user.images instanceof Array ? user.images : []),
-                photoURL: user.previousData.photoURL
+                photoURL: user.previousData ? user.previousData.photoURL : ''
             }
         };
     }

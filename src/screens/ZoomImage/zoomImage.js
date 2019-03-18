@@ -53,7 +53,7 @@ export default class ZoomImage extends React.Component {
                     text: 'OK', 
                     onPress: async () => {
                         this.props.User.deleteImage(index).then(() => {
-                            this.props.navigation.goBack();
+                            this.props.navigation.navigate('Profile');
                         });
                     }
                 },
