@@ -56,7 +56,7 @@ const Drawer = DrawerNavigator(
         Settings: { screen: TabNavigation }
     },
     {
-        initialRouteName:'Explore',
+        initialRouteName:'ProfileTabs',
         contentComponent: props => <Sidebar {...props} />
     }
 );
