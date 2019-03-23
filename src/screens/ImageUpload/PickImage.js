@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, Image, Platform } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-class PickImage extends Component {
+class PickImage extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
@@ -13,14 +13,13 @@ class PickImage extends Component {
     }
     render () {
         if (this.state.avatarSource !== null || this.props.uri) {
-            console.log('Change Source',);
             return (
                 <TouchableOpacity
                     style={styles.container}
                     onPress={this.selectAvatar}
                 >
                     <Image
-                        source={{ uri: this.state.avatarSource ? 'file:///' + this.state.avatarSource : this.props.uri }}
+                        source={{ uri: this.state.avatarSource ? this.state.avatarSource : this.props.uri }}
                         style={styles.image}
                     />
                 </TouchableOpacity>
@@ -53,13 +52,12 @@ class PickImage extends Component {
           } else if (response.customButton) {
               console.log('User tapped custom button: ', response.customButton);
           } else {
-              const source = { uri: response.uri };
-              console.log(source);
+              const source = Platform.OS === 'android' ? 'file///' +  response.path : response.uri;
               this.setState({
-                  avatarSource: response.path,
+                  avatarSource: source,
                   fileName: response.fileName
               });
-              this.props.onFilePick(response.path, response.fileName);
+              this.props.onFilePick(source, response.fileName);
           }
       });
   }
