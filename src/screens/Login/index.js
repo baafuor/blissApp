@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, ImageBackground, StatusBar } from 'react-native';
+import { Image, ImageBackground, StatusBar, Platform } from 'react-native';
 import {
     Container,
     Content,
@@ -32,7 +32,7 @@ class LoginForm extends Component {
           const { accessToken, idToken } = await GoogleSignin.signIn();
           const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
           const firebaseUserCredential = await firebase.auth().signInWithCredential(credential);
-          const { email, displayName, uid, photoURL } = firebaseUserCredential.user;
+          const { email, displayName, uid, photoURL } = Platform.OS === 'android' ? firebaseUserCredential.user : firebaseUserCredential.user._user;
           this.props.navigation.navigate('EditProfile', { email, displayName, uid, photoURL });
       } catch (error) {
           console.log(error);
