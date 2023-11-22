@@ -1,2 +1,2 @@
 # blissApp
-bliss mobile application 
+bliss mobile application written in React Native
